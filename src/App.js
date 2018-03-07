@@ -3,37 +3,12 @@ import { Router, Route, Switch, Link } from 'react-router-dom'
 import createHistory from "history/createBrowserHistory"
 import Dropzone from 'react-dropzone'
 import uuid from 'uuid/v1'
+import { Provider as StoreProvider } from 'react-redux'
+
+import { Home } from './components/Home'
+import { store } from './redux/store'
 
 const history = createHistory()
-
-// Mon IP 10.138.11.112:8000/upload
-
-class Home extends Component {
-  state = {
-    loading: false,
-    result: null,
-  }
-  componentDidMount() {
-    this.setState({ loading: true, result: null })
-    fetch('https://randomuser.me/api/')
-      .then(data => data.json())
-      .then(data => this.setState({ result: data.results[0], loading: false }))
-  }
-  render() {
-    const { result, loading } = this.state
-
-    return (
-      <div>
-        {!result && !loading && 'Home'}
-        {loading && 'Loading'}
-        {!loading && result && result.name.first}
-        <div>
-
-        </div>
-      </div>
-    )
-  }
-}
 
 const UploadDone = ({ files }) => files.map(file => (
   <div key={file.id}>
@@ -146,9 +121,11 @@ class App extends Component {
 }
 
 const Providers = () => (
-  <Router history={history}>
-    <App />
-  </Router>
+  <StoreProvider store={store}>
+    <Router history={history}>
+      <App />
+    </Router>
+  </StoreProvider>
 )
 
 export default Providers;
