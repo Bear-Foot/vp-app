@@ -3,6 +3,8 @@ const initialState = 0
 export const INCREMENT = 'INCREMENT'
 export const DECREMENT = 'DECREMENT'
 
+export const countSelector = state => state.oldDemo.count
+
 export const createIncrement = number => ({
   type: INCREMENT,
   payload: {

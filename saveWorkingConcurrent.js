@@ -69,13 +69,11 @@ class Upload extends Component {
   state = {
     files: []
   }
-  startUploads = (files, droppedFiles) => {
-    this.setState({
-      files,
-    }, () => this.uploadFiles(droppedFiles))
+  startUploads = (files) => {
+    this.props.initialize(files.map(file => ({ name: file.name, id: file.id })))
+    this.uploadFiles(files)
   }
-  uploadFiles = (droppedFiles) => {
-    const { files } = this.state
+  uploadFiles = (files) => {
     files.forEach((fileToUpload, i) => {
       this.setState(oldState => {
         const { files } = oldState

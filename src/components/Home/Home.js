@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { createIncrement, createDecrement } from '../../redux/count'
+import { createIncrement, createDecrement, countSelector } from '../../redux/count'
 import { createRandomize } from '../../redux/random'
 
 const HomeComponent = ({ count, random, decrement, increment, randomize }) => (
@@ -17,7 +17,7 @@ const HomeComponent = ({ count, random, decrement, increment, randomize }) => (
 
 const ConnectedHome = connect(
   state => ({
-    count: state.count,
+    count: countSelector(state),
     random: state.random,
   }),
   { //mapDispatchToProps

@@ -2,12 +2,20 @@ import { createStore, combineReducers } from 'redux'
 
 import { count } from './count'
 import { random } from './random'
+import { files } from './files'
 
-const reducer = combineReducers({
-  count,
-  random,
+const oldDemo = combineReducers({
+  count, random,
 })
 
-export const store = createStore(reducer);
+const reducer = combineReducers({
+  oldDemo,
+  files,
+})
 
-console.log(store.getState());
+export const store = createStore(
+  reducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
+
+// store.subscribe(() => console.log(store.getState()))
