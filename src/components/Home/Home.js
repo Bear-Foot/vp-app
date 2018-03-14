@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { createIncrement, createDecrement, countSelector } from '../../redux/count'
 import { createRandomize } from '../../redux/random'
+import { ongoingSelector, memoizedOngoingSelector } from '../../redux/files'
 
 const HomeComponent = ({ count, random, decrement, increment, randomize }) => (
   <div>
@@ -11,14 +12,15 @@ const HomeComponent = ({ count, random, decrement, increment, randomize }) => (
     <button onClick={() => increment(5)}> Increment by 5</button>
     <button onClick={() => increment(3)}> Increment by 3</button>
     <button onClick={() => decrement(4)}> Decrement by 4 </button>
-    <button onClick={randomize}> Randommize </button>
+    <button onClick={randomize}> Randomize </button>
   </div>
 )
-
 const ConnectedHome = connect(
   state => ({
     count: countSelector(state),
     random: state.random,
+    test1: ongoingSelector(state),
+    test2: memoizedOngoingSelector(state),
   }),
   { //mapDispatchToProps
     increment: createIncrement,
@@ -26,5 +28,7 @@ const ConnectedHome = connect(
     randomize: createRandomize,
   }
 )(HomeComponent)
+
+
 
 export const Home = ConnectedHome

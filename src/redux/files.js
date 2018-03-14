@@ -1,4 +1,6 @@
 import { createSelector } from 'reselect'
+import uuid from 'uuid/v1'
+import { createReducer } from '../utils/createReducer'
 
 const initialState = {
   files: [],
@@ -6,6 +8,12 @@ const initialState = {
 }
 export const filesSelector = state => state.files.files
 export const filterSelector = state => state.files.filter
+
+export const ongoingSelector = state => filesSelector(state).filter(file => file.status === 'loading').length
+export const memoizedOngoingSelector = createSelector(
+  filesSelector,
+  files => files.filter(file => file.status === 'loading').length
+)
 
 export const filteredFilesSelector = createSelector(
   filesSelector,
@@ -25,7 +33,7 @@ export const FILTER_RESET = 'FILTER_RESET'
 
 export const initialize = files => ({
   type: INITIALIZE_FILES,
-  payload: { files }
+  payload: { files },
 })
 
 const createActionCreator = status => id => ({ type: status, payload: { id } })
@@ -39,35 +47,49 @@ export const filterError = createFilterCreator(FILTER_ERROR)
 export const filterLoading = createFilterCreator(FILTER_LOADING)
 export const filterReset = createFilterCreator(FILTER_RESET)
 
-const statusHandler = status => (state, { payload: { id }}) => ({
-  ...state,
-  files: state.files.map(
-    file => (id === file.id ? {...file, status } : file)
-  )
-})
 
 const filterHandler = status => state => ({
-   ...state,
-   filter: status
- })
+  ...state,
+  filter: status
+})
+
+const fileStatusHandler = status => file => ({
+  ...file,
+  status
+})
+
+const fileActionHandlers = {
+  [STATUS_ERROR]: fileStatusHandler('error'),
+  [STATUS_LOADING]: fileStatusHandler('loading'),
+  [STATUS_DONE]: fileStatusHandler('done'),
+}
+
+const fileReducer = createReducer(fileActionHandlers)
+
+const statusHandler = status => (state, action) => ({
+  ...state,
+  files: state.files.map(
+    file => (action.payload.id === file.id ? fileReducer(file, action) : file)
+  )
+})
 
 const actionHandlers = {
   [INITIALIZE_FILES]: (state, action) => ({
     ...state,
-    files: action.payload.files
+    files: action.payload.files.map(file => ({
+      id: uuid(),
+      name: file.name,
+      data: file,
+    })),
   }),
+  [STATUS_ERROR]: statusHandler('error'),
   [STATUS_LOADING]: statusHandler('loading'),
   [STATUS_DONE]: statusHandler('done'),
-  [STATUS_ERROR]: statusHandler('error'),
   [FILTER_DONE]: filterHandler('done'),
   [FILTER_ERROR]: filterHandler('error'),
   [FILTER_LOADING]: filterHandler('loading'),
   [FILTER_RESET]: filterHandler(null),
 }
 
-function reducer(state = initialState, action) {
-  const handler = actionHandlers[action.type]
-  return handler ? handler(state, action) : state
-}
 
-export const files = reducer
+export const files = createReducer(actionHandlers, initialState)

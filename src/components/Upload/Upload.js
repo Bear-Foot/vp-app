@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import uuid from 'uuid/v1';
 import Dropzone from 'react-dropzone'
+import T from 'prop-types'
 
 import { countSelector } from '../../redux/count'
 import {
@@ -15,6 +16,7 @@ import {
   filterReset,
   filteredFilesSelector,
 } from '../../redux/files'
+import { upload } from '../../requests/upload'
 
 const UploadDoneComponent = ({
     files,
@@ -42,6 +44,15 @@ const UploadDoneComponent = ({
   </div>
 )
 
+const fileType = T.shape({
+  name: T.string.isRequired,
+  status: T.number.isRequired,
+})
+
+UploadDoneComponent.propTypes = {
+  files: T.arrayOf(fileType),
+}
+
 const UploadDone = connect(
   state => ({
     files: filteredFilesSelector(state),
@@ -57,12 +68,7 @@ const UploadDone = connect(
 
 class UploadDefault extends Component {
   onDrop = (files) => {
-    const newFiles = files.map(file => ({
-      data: file,
-      id: uuid(),
-      name: file.name,
-    }))
-    this.props.startUploads(newFiles)
+    this.props.startUploads(files)
   }
   render() {
     return (
@@ -81,28 +87,7 @@ class UploadComponent extends Component {
     files: []
   }
   startUploads = (files) => {
-    this.props.initialize(files.map(file => ({ id: file.id, name: file.name })))
-    this.uploadFiles(files)
-  }
-  uploadFiles = (files) => {
-    files.forEach((fileToUpload, i) => {
-
-      const formData = new FormData();
-      formData.append('file', fileToUpload.data)
-
-      this.props.startUpload(fileToUpload.id)
-      fetch('http://10.138.11.112:8000/upload', {
-        method: 'POST',
-        body: formData,
-      })
-        .then(response => {
-          if (response.ok) {
-            this.props.endUpload(fileToUpload.id)
-          } else {
-            this.props.errorUpload(fileToUpload.id)
-          }
-        })
-    })
+    files.forEach(this.props.upload)
   }
   render() {
     return (
@@ -117,9 +102,7 @@ class UploadComponent extends Component {
 export const Upload = connect(
   null,
   {
-    endUpload,
-    startUpload,
-    errorUpload,
     initialize,
+    upload,
   }
 )(UploadComponent)
