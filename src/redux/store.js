@@ -1,14 +1,15 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 
-import { count } from './count'
+import { count, countSelector } from './count'
 import { random } from './random'
-import { files } from './files'
+import { files } from './files/reducer'
 import { timers } from './timers/reducer'
 import { timer } from './timer/reducer'
 
 const oldDemo = combineReducers({
-  count, random,
+  count,
+  random,
 })
 
 const reducer = combineReducers({
@@ -25,5 +26,3 @@ export const store = createStore(
   devToolMiddleWare,
   applyMiddleware(thunk),
 );
-
-// store.subscribe(() => console.log(store.getState()))

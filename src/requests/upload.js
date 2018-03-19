@@ -2,7 +2,7 @@ import {
   endUpload,
   startUpload,
   errorUpload,
-} from '../redux/files'
+} from '../redux/files/actions'
 
 export const upload = fileToUpload => (dispatch, getState) => {
   const formData = new FormData();
