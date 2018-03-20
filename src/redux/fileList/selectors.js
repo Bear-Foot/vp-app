@@ -12,6 +12,8 @@ const createFilteredFilesSelector = filter => createSelector(
 
 export const ongoingSelector = createFilteredFilesSelector('loading')
 export const waitingSelector = createFilteredFilesSelector('waiting')
+export const errorSelector = createFilteredFilesSelector('error')
+export const doneSelector = createFilteredFilesSelector('done')
 
 export const filteredFilesSelector = createSelector(
   filesSelector,

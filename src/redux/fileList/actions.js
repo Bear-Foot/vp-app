@@ -16,7 +16,7 @@ export const startUploadFiles = files => (dispatch, getState) => {
 export const uploadParallel = (dispatch, getState) => {
   const ongoing = ongoingSelector(getState());
   const waiting = waitingSelector(getState());
-  
+
   if (ongoing.length < 2 && waiting.length > 0) {
     const fileToUpload = waiting[0]
     dispatch(startUpload(fileToUpload.id))

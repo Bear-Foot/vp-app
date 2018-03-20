@@ -1,57 +1,82 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Dropzone from 'react-dropzone'
-
-import {
-  filterDone,
-  filterError,
-  filterLoading,
-  filterReset,
-} from '../../redux/uploads/actions'
+import styled from 'styled-components'
 
 import {
   startUploadFiles,
 } from '../../redux/fileList/actions'
 
 import {
-  filteredFilesSelector,
+  ongoingSelector,
+  doneSelector,
+  errorSelector,
+  waitingSelector,
 } from '../../redux/fileList/selectors'
 
 import { File } from '../File'
 
-const UploadDoneComponent = ({
-    files,
-    filterDone,
-    filterError,
-    filterLoading,
-    filterReset,
-  }) => (
-  <div>
-    <button onClick={filterReset}> None </button>
-    <button onClick={filterDone}> Done </button>
-    <button onClick={filterError}> Error </button>
-    <button onClick={filterLoading}> Loading </button>
-    {
-      files
-        .map(file => (
-          <File key={file.id} file={file.data} />
-        )
-      )
-    }
-  </div>
+const UploadPanelComponent = ({
+  waitingFiles,
+  ongoingFiles,
+  errorFiles,
+  doneFiles,
+}) => (
+  <Wrapper>
+    <FileList>
+      {
+        waitingFiles.length ?
+          waitingFiles.map(file => (
+            <File key={file.id} file={file.data} />
+          )
+        ): 'No files queued'
+      }
+    </FileList>
+    <FileList>
+      {
+        ongoingFiles.length ?
+          ongoingFiles.map(file => (
+            <File key={file.id} file={file.data} />
+          )
+        ): 'No files being uploaded'
+      }
+    </FileList>
+    <FileList>
+      {
+        errorFiles.length ?
+          errorFiles.map(file => (
+            <File key={file.id} file={file.data} />
+          )
+        ): 'No files failed'
+      }
+    </FileList>
+    <FileList>
+      {
+        doneFiles.length ?
+          doneFiles.map(file => (
+            <File key={file.id} file={file.data} />
+          )
+        ): 'No files done'
+      }
+    </FileList>
+  </Wrapper>
 )
 
-const UploadDone = connect(
+const FileList = styled.div`
+  width: 25%;
+`
+const Wrapper = styled.div`
+  display: flex;
+`
+
+const UploadPanel = connect(
   state => ({
-    files: filteredFilesSelector(state),
+    waitingFiles: waitingSelector(state),
+    ongoingFiles: ongoingSelector(state),
+    errorFiles: errorSelector(state),
+    doneFiles: doneSelector(state),
   }),
-  {
-    filterDone,
-    filterError,
-    filterLoading,
-    filterReset,
-  }
-)(UploadDoneComponent)
+)(UploadPanelComponent)
 
 class UploadDefault extends Component {
   onDrop = (files) => {
@@ -59,15 +84,30 @@ class UploadDefault extends Component {
   }
   render() {
     return (
-      <Dropzone
-        onDrop={this.onDrop}
-        style={{height: 40}}
-      >
-        Drop files here...
-      </Dropzone>
+      <DropWrapper>
+        <Dropzone
+          onDrop={this.onDrop}
+          style={{
+            padding: 10,
+          }}
+        >
+          Drop files here...
+        </Dropzone>
+      </DropWrapper>
     )
   }
 }
+
+const DropWrapper = styled.div`
+  height: 40px;
+  background: #9fb;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover{
+    background: #6c9;
+  }
+`
 
 class UploadComponent extends Component {
   startUploads = (files) => {
@@ -77,7 +117,7 @@ class UploadComponent extends Component {
     return (
         <div>
           <UploadDefault startUploads={this.startUploads} />
-          <UploadDone />
+          <UploadPanel />
         </div>
     )
   }

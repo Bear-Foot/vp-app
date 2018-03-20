@@ -9,11 +9,10 @@ import { Timer } from './components/Timer'
 
 const Menu = () => (
   <MenuWrapper>
-    <Line><Link to="/"> Go to home </Link></Line>
-    <Line><Link to="/timer"> Go to timer </Link></Line>
-    <Line><Link to="/timers"> Go to timerS </Link></Line>
-    <Line><Link to="/upload"> Go to uploads </Link></Line>
-    <Line><Link to="/upload/done"> Go to done </Link></Line>
+    <Link to="/"><Line > Go to home </Line></Link>
+    <Link to="/timer"><Line> Go to timer </Line></Link>
+    <Link to="/timers"><Line> Go to timerS </Line></Link>
+    <Link to="/upload"><Line> Go to uploads </Line></Link>
   </MenuWrapper>
 )
 
@@ -28,8 +27,13 @@ const MenuWrapper = styled.div`
 `
 
 const Line = styled.div`
-  background: #ccc;
-  margin: 5px;
+  padding: 5px;
+  text-decoration: none;
+  display: inline-block;
+  color: white;
+  &:hover{
+    color: yellow;
+  }
 `
 
 export class App extends Component {
