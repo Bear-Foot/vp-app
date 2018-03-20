@@ -4,7 +4,13 @@ import { connect } from 'react-redux'
 import { createIncrement, createDecrement, countSelector } from '../../redux/count'
 import { createRandomize } from '../../redux/random'
 
-const HomeComponent = ({ count, random, decrement, increment, randomize }) => (
+const HomeComponent = ({
+  count,
+  random,
+  decrement,
+  increment,
+  randomize
+}) => (
   <div>
     <div>{count}</div>
     <div>{random}</div>
