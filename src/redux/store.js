@@ -1,8 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import { plugSocket } from '../socket/bind'
 
-import { emitActionMiddleware } from '../socket/middleware'
 import { count } from './count'
 import { random } from './random'
 import { timers } from './timers/reducer'
@@ -26,7 +24,5 @@ const devToolMiddleWare = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_
 export const store = createStore(
   reducer,
   devToolMiddleWare,
-  applyMiddleware(thunk, emitActionMiddleware),
+  applyMiddleware(thunk),
 );
-
-plugSocket(store)
