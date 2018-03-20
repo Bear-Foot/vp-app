@@ -25,7 +25,7 @@ export const createListReducer = ({
   Object.keys(sorts).forEach(sortName => (actionsNames[sortName] = `${prefix}_${sortName}`))
 
   const actionsHandlers = {
-    [actionsNames.ADD]: (state, action) => [...state, { data: childReducer(undefined, {}), id: uuid()}],
+    [actionsNames.ADD]: (state, action) => [...state, { data: childReducer(undefined, action), id: uuid()}],
     [actionsNames.REMOVE_ALL]: () => [],
     [actionsNames.REMOVE]: (state, action) => state.filter(elem => {
       return !getIdFromAction(action).find(id => id === elem.id)

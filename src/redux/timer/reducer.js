@@ -1,7 +1,6 @@
 import { createReducer } from '../../utils/createReducer'
 
 import {
-  TIMER_CREATE,
   TIMER_START,
   TIMER_TICK,
   TIMER_PAUSE,
@@ -13,10 +12,6 @@ const initialState = {
   elapsedTime: null,
   paused: true,
 }
-
-const createInitialState = () => ({
-  ...initialState,
-})
 
 const actionHandlers = {
   [TIMER_START]: (state, action) => ({

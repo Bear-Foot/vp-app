@@ -1,0 +1,1 @@
+export const uploadsSelector = state => state.uploads

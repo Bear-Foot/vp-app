@@ -1,11 +1,13 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
+import { plugSocket } from '../socket/bind'
 
-import { count, countSelector } from './count'
+import { emitActionMiddleware } from '../socket/middleware'
+import { count } from './count'
 import { random } from './random'
-import { files } from './files/reducer'
 import { timers } from './timers/reducer'
 import { timer } from './timer/reducer'
+import { uploads } from './uploads/reducer'
 
 const oldDemo = combineReducers({
   count,
@@ -14,7 +16,7 @@ const oldDemo = combineReducers({
 
 const reducer = combineReducers({
   oldDemo,
-  files,
+  uploads,
   timers,
   timer: (state, action) => action.target ? state : timer(state, action),
 })
@@ -24,5 +26,7 @@ const devToolMiddleWare = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_
 export const store = createStore(
   reducer,
   devToolMiddleWare,
-  applyMiddleware(thunk),
+  applyMiddleware(thunk, emitActionMiddleware),
 );
+
+plugSocket(store)

@@ -1,20 +1,23 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import uuid from 'uuid/v1';
 import Dropzone from 'react-dropzone'
-import T from 'prop-types'
 
 import {
   filterDone,
   filterError,
   filterLoading,
   filterReset,
+} from '../../redux/uploads/actions'
+
+import {
   startUploadFiles,
-} from '../../redux/files/actions'
+} from '../../redux/fileList/actions'
 
 import {
   filteredFilesSelector,
-} from '../../redux/files/selectors'
+} from '../../redux/fileList/selectors'
+
+import { File } from '../File'
 
 const UploadDoneComponent = ({
     files,
@@ -31,9 +34,7 @@ const UploadDoneComponent = ({
     {
       files
         .map(file => (
-          <div key={file.id}>
-            {file.name} -- {file.status}
-          </div>
+          <File key={file.id} file={file.data} />
         )
       )
     }

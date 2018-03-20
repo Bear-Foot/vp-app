@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import { timeSelector, elapsedTimeSelector, timerStatusSelector } from '../../redux/timer/selectors'
 import { timerById, timerStatusSelectorById } from '../../redux/timers/selectors'
 import { pauseTimer, resumeTimer, startTimer } from '../../redux/timer/actions'
-import { startTimerById, pauseTimerById, resumeTimerById } from '../../redux/timers/actions'
 
 const formatTime = time => `${Math.floor(time / 60000)}:${Math.floor(time / 1000)}:${time % 1000}`
 
