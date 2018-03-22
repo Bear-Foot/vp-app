@@ -14,3 +14,5 @@
 - Passer l'upload en background pour le laisser tourner quand on ferme le site
 - Faire une API qui liste tous les uploads passés et en cours tous clients confondus, puis faire une page dans l'application qui utilise ce endpoint pour montrer tous les uploads en cours, avec le uploader correspondant
 - Faire une page d'authentification avec échange de token et vérif du token sur les autres endpoints
+
+https://join.slack.com/t/react-academy/shared_invite/enQtMzMzNjY4MTQ0MDE3LTJiYTFiMGU3MmRlYzRjYTMwZjlmYjVlOGRjN2Q3YmJlNjJmMGUzYmM4NjZkODZkZjQ0OGFiOGM1NjgyZjQ2OWM
